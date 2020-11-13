@@ -1,12 +1,12 @@
-import { getProducts, getResponseObject } from '../utils';
+import * as productController from '../controllers/product';
+import { getResponseObject, withLogger } from '../utils';
 
 export const getProductById = async event => {
   try {
     const {
       pathParameters: { id },
     } = event;
-    const products = await getProducts();
-    const productById = products.find(p => p.id === id);
+    const productById = await productController.getProductById(id);
 
     if (!productById) {
       return getResponseObject(404, {
@@ -16,6 +16,8 @@ export const getProductById = async event => {
 
     return getResponseObject(200, { data: productById });
   } catch (e) {
-    return getResponseObject(500, { error: 'Error getting product' });
+    return getResponseObject(500, { error: 'Internal server error' });
   }
 };
+
+export default withLogger('getProductById')(getProductById);
