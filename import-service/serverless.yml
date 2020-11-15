@@ -1,0 +1,50 @@
+service: import-service
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: eu-west-1
+
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action: 's3:ListBucket'
+      Resource:
+        - 'arn:aws:s3:::spitai-import'
+    - Effect: 'Allow'
+      Action: 's3:*'
+      Resource:
+        - 'arn:aws:s3:::spitai-import/*'
+
+plugins:
+  - serverless-webpack
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    includeModules: true
+    excludeFiles: src/**/*.test.js
+
+functions:
+  importProductsFile:
+    handler: handler.importProductsFile
+    events:
+      - http:
+          method: get
+          path: import
+          cors: true
+          request:
+            parameters:
+              querystrings:
+                name: true
+  importFileParser:
+    handler: handler.importFileParser
+    events:
+      - s3:
+          bucket: 'spitai-import'
+          event: 's3:ObjectCreated:*'
+          rules:
+            - prefix: 'uploaded/'
+              suffix: '.csv'
+          existing: true
+              
