@@ -3,8 +3,12 @@ service: import-service
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: dev
+  stage: ${self:custom.stage}
   region: eu-west-1
+
+  environment:
+    SQS_URL:
+      Ref: SQSQueue
 
   iamRoleStatements:
     - Effect: 'Allow'
@@ -15,6 +19,21 @@ provider:
       Action: 's3:*'
       Resource:
         - 'arn:aws:s3:::spitai-import/*'
+    - Effect: 'Allow'
+      Action: 'sqs:*'
+      Resource:
+        Fn::GetAtt: [SQSQueue, Arn]
+
+resources:
+  Resources:
+    SQSQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalogItemsQueue
+  Outputs:
+    SQSQueueArn:
+      Value:
+        Fn::GetAtt: [SQSQueue, Arn]
 
 plugins:
   - serverless-webpack
@@ -24,6 +43,7 @@ custom:
     webpackConfig: 'webpack.config.js'
     includeModules: true
     excludeFiles: src/**/*.test.js
+  stage: dev
 
 functions:
   importProductsFile:
