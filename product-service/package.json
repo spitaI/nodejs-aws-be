@@ -18,6 +18,8 @@
     "pg": "^8.4.2"
   },
   "devDependencies": {
+    "aws-sdk": "^2.792.0",
+    "aws-sdk-mock": "^5.1.0",
     "@babel/preset-env": "^7.12.1",
     "jest": "^26.6.1",
     "serverless-dotenv-plugin": "^3.1.0",

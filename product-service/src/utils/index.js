@@ -1,6 +1,13 @@
 import Joi from 'joi';
+import AWS from 'aws-sdk';
 
-import { DEFAULT_HEADERS } from '../constants';
+import {
+  DEFAULT_HEADERS,
+  SNS_CONFIG,
+  SNS_PUBLICATION_MESSAGE,
+  FILTER,
+} from '../constants';
+import { products } from '../handlers/__mock__';
 
 export const getResponseObject = (statusCode, body) => ({
   statusCode,
@@ -12,7 +19,7 @@ export const withLogger = handlerName => handler => async event => {
   console.info(
     `${handlerName} handler invoked${
       event && ` with event: ${JSON.stringify(event, null, 2)}`
-    }`,
+    }`
   );
   return await handler(event);
 };
@@ -34,3 +41,35 @@ export const validateProduct = product => {
   });
   return productSchema.validate(product);
 };
+
+export const getSNSTopic = () => new AWS.SNS(SNS_CONFIG);
+
+export const getSNSArn = () => process.env.SNS_ARN;
+
+export const getSNSPublicationMessage = product =>
+  `${SNS_PUBLICATION_MESSAGE}${JSON.stringify(product)}`;
+
+export const getFilterValues = product =>
+  Object.keys(FILTER).reduce((acc, filterKey) => {
+    const filterValue = Object.values(FILTER[filterKey]).find(v =>
+      v.predicate(product[v.prop])
+    );
+    return filterValue
+      ? {
+          ...acc,
+          [filterKey]: filterValue.value,
+        }
+      : acc;
+  }, {});
+
+export const getSNSPublicationMessageAttrs = filterValues =>
+  Object.keys(FILTER).reduce(
+    (acc, filterKey) => ({
+      ...acc,
+      [filterKey]: {
+        DataType: 'String',
+        StringValue: filterValues[filterKey],
+      },
+    }),
+    {}
+  );

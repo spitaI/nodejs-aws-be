@@ -3,8 +3,49 @@ service: product-service
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: dev
+  stage: ${self:custom.stage}
   region: eu-west-1
+
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action: 'sns:*'
+      Resource:
+        Ref: SNSTopic
+    - Effect: 'Allow'
+      Action: 'sqs:*'
+      Resource:
+        - "${cf:import-service-${self:custom.stage}.SQSQueueArn}"
+
+  environment:
+    SNS_ARN:
+      Ref: SNSTopic
+
+resources:
+  Resources:
+    SNSTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: createProductTopic
+    SNSSubsciption:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: ${env:SNS_EMAIL1}
+        Protocol: email
+        TopicArn:
+          Ref: SNSTopic
+        FilterPolicy:
+          bookType:
+            - "tiny"
+    SNSSubsciption2:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: ${env:SNS_EMAIL2}
+        Protocol: email
+        TopicArn:
+          Ref: SNSTopic
+        FilterPolicy:
+          bookType:
+            - "big"
 
 plugins:
   - serverless-webpack
@@ -15,6 +56,7 @@ custom:
     webpackConfig: 'webpack.config.js'
     includeModules: true
     excludeFiles: src/**/*.test.js
+  stage: dev
 
 functions:
   getProductsList:
@@ -42,3 +84,10 @@ functions:
           method: post
           path: products
           cors: true
+  catalogBatchProcess:
+    handler: handler.catalogBatchProcess
+    events:
+      - sqs:
+          batchSize: 5
+          arn:
+            - "${cf:import-service-${self:custom.stage}.SQSQueueArn}"

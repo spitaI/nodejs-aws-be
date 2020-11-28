@@ -10,6 +10,7 @@ export const products = [
     price: 20.5,
     image:
       'https://cdn25.img.ria.ru/images/39074/33/390743378_0:0:0:0_1440x900_80_0_1_192395f48eed77bc9df4ae758647e8fe.jpg.webp?source-sid=flickr',
+    count: 1,
   },
   {
     id: '7567ec4b-b10c-45c5-9345-fc73c48a80a1',
@@ -22,6 +23,7 @@ export const products = [
     price: 50,
     image:
       'https://images-na.ssl-images-amazon.com/images/I/512Hli3f6FL._AC_UL600_SR456,600_.jpg',
+    count: 1,
   },
   {
     id: '7567ec4b-b10c-45c5-9345-fc73c48a80a3',
@@ -34,6 +36,7 @@ export const products = [
     price: 30.3,
     image:
       'https://images-na.ssl-images-amazon.com/images/I/41hZDooM2zL._SX302_BO1,204,203,200_.jpg',
+    count: 1,
   },
   {
     id: '7567ec4b-b10c-48c5-9345-fc73c48a80a4',
@@ -46,6 +49,7 @@ export const products = [
     price: 69.99,
     image:
       'https://images-na.ssl-images-amazon.com/images/I/51+Ee6EuenL._SX376_BO1,204,203,200_.jpg',
+    count: 1,
   },
   {
     id: '7567ec4b-b10c-48c5-9345-fc73c48a80a5',
@@ -57,6 +61,7 @@ export const products = [
     published: '2015-12-27T00:00:00.000Z',
     price: 53.99,
     image: 'https://miro.medium.com/max/1200/0*wNwIsj7-6X7aHEmw.jpg',
+    count: 1,
   },
   {
     id: '7567ec4b-b10c-48c5-9345-fc73c48a80a6',
@@ -69,5 +74,6 @@ export const products = [
     price: 25,
     image:
       'https://images-na.ssl-images-amazon.com/images/I/51H-31ivMTL._SX379_BO1,204,203,200_.jpg',
+    count: 1,
   },
 ];
