@@ -29,7 +29,7 @@ resources:
     SNSSubsciption:
       Type: AWS::SNS::Subscription
       Properties:
-        Endpoint: alex.asm.1997@gmail.com
+        Endpoint: ${env:SNS_EMAIL1}
         Protocol: email
         TopicArn:
           Ref: SNSTopic
@@ -39,7 +39,7 @@ resources:
     SNSSubsciption2:
       Type: AWS::SNS::Subscription
       Properties:
-        Endpoint: sinner.in.me11@gmail.com
+        Endpoint: ${env:SNS_EMAIL2}
         Protocol: email
         TopicArn:
           Ref: SNSTopic
