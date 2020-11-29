@@ -1,5 +1,4 @@
 import AWS from 'aws-sdk';
-import { type } from 'os';
 
 import {
   DEFAULT_HEADERS,
