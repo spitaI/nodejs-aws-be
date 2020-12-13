@@ -1,0 +1,32 @@
+{
+  "name": "bff-service",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "build": "webpack",
+    "start": "npm run build && node dist/main.js",
+    "dev": "babel-node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "asm",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "dotenv": "^8.2.0",
+    "express": "~4.16.1",
+    "node-cache": "^5.1.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/node": "^7.12.10",
+    "@babel/preset-env": "^7.12.10",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^4.2.0"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  }
+}
